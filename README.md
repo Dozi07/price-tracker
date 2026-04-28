@@ -1,4 +1,4 @@
-# Price Tracker Backend
+# Price Tracker
 Сервис для отслеживания цен на товары.
 
 ## Технологии
