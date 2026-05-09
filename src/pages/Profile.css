@@ -1,0 +1,238 @@
+.profile {
+    min-height: 100vh;
+    padding: 20px 40px;
+}
+
+.profile_n {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+
+.exit {
+    height: 38px;
+    padding: 0 20px;
+    background: #273287;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.exit:hover {
+    background: #D8E63C;
+    color: #273287;
+}
+.profile-create {
+    height: 40px;
+    padding: 0 20px;
+    background: transparent;
+    color: #273287;
+    border: 2px solid #273287;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+.category {
+    background: white;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.category-header:hover {
+    background: #f7f7f7;
+}
+.category-save {
+    height: 42px;
+    padding: 0 20px;
+    background: #273287;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-save:hover {
+    background: #D8E63C;
+    color: #273287;
+}
+.category-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.arrow {
+    color: #273287;
+    font-size: 12px;
+}
+
+.category-name {
+    font-weight: 700;
+    color: #273287;
+    font-size: 16px;
+}
+.category-right {
+    display: flex;
+    gap: 8px;
+}
+
+.cat-clear {
+    height: 32px;
+    padding: 0 16px;
+    background: transparent;
+    color: #273287;
+    border: 1px solid #D3DDE7;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-clear:hover {
+    background: #D3DDE7;
+}
+
+.cat-delete {
+    height: 32px;
+    padding: 0 16px;
+    background: transparent;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-delete:hover {
+    background: #ff4d4d;
+    color: white;
+}
+.category-body {
+    padding: 16px 20px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cat-add {
+    align-self: flex-start;
+    height: 38px;
+    padding: 0 20px;
+    background: #d6b4fc;
+    color: #273287;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cat-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(216, 230, 60, 0.4);
+}
+.add-product-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.product-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #D3DDE7;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border 0.2s ease;
+    box-sizing: border-box;
+}
+
+.product-input:focus {
+    border-color: #273287;
+}
+
+.marketplace-select {
+    height: 42px;
+    padding: 0 12px;
+    border: 2px solid #D3DDE7;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    color: #273287;
+    cursor: pointer;
+}
+
+.product-confirm {
+    height: 42px;
+    padding: 0 20px;
+    background: #273287;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.product-confirm:hover {
+    background: #d6b4fc;
+    color: #273287;
+}
+.product-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.product-img {
+    width: 80px;
+    height: 80px;
+    background: #D3DDE7;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.product-desc {
+    flex: 1;
+    color: #273287;
+    font-size: 15px;
+}
+
+.product-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.price-tag {
+    background: #273287;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
