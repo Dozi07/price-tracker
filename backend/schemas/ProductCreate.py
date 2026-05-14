@@ -3,6 +3,6 @@ from typing import Optional
 
 class ProductCreate(BaseModel):
     name: str
-    price: str
+    price: int
     url: str
     user_id : int

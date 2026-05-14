@@ -15,7 +15,7 @@ async def get_user_products(
         current_user: dict = Depends(get_current_user)
 ):
 
-    products = db.query(Product).filter(Product.owner_id == current_user.id).all()
+    products = db.query(Product).filter(Product.user_id == current_user.id).all()
 
     if not products:
         return []

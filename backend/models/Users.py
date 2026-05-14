@@ -4,7 +4,7 @@ from database.Creating_eng_db import Base  # Импортируем "катал�
 
 
 class User(Base):
-    __tablename__ = "Users"
+    __tablename__ = "users"
     id = Column(Integer, primary_key=1)
     email = Column(String, unique=1, nullable=0)
     hashed_password = Column(String, unique=0, nullable=0)

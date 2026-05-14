@@ -3,5 +3,5 @@ from pydantic import BaseModel
 class ProductOut(BaseModel):
     id : int
     name : str
-    price : str
+    price : int
     url : str
