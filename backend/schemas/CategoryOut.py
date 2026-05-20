@@ -8,4 +8,4 @@ class CategoryOut(BaseModel):
     products: List[ProductOut] = []
 
     class Config:
-        from_attributes = True #позволяет читать данные из баз SQLalchemy
+        from_attributes = True

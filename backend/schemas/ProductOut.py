@@ -5,3 +5,10 @@ class ProductOut(BaseModel):
     name : str
     price : int
     url : str
+    category_id: int
+    min_price: int
+    max_price: int
+
+    class Config:
+        from_attributes = True
+        

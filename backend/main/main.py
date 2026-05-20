@@ -1,7 +1,6 @@
-#from models.Users import User
-#from models.Product import Product
-#from models.Category import Category
-
+from models.Users import User 
+from models.Product import Product
+from models.Category import Category
 from fastapi import FastAPI, Depends, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from main.registrated import router as auth_router
@@ -14,7 +13,6 @@ from main.categories import router as categories_router
 create()
 app = FastAPI()
 
-app = FastAPI()
 
 origins = [
     "http://localhost:5173",
@@ -23,7 +21,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins, # Разрешаем наш фронтенд
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -6,7 +6,7 @@ from main.get_db import get_db
 from Security.JWT_create import SECRET_KEY, ALGORITHM
 from crud.get_user_email import get_user_email
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login") #ищем токен в загаловке запроса
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):

@@ -10,32 +10,22 @@ def parse_ozon_product(url: str) -> dict:
     """Очищенный парсер Ozon для интеграции в бэкенд"""
     options = uc.ChromeOptions()
     options.add_argument("--window-size=1920,1080")
-
-    # Папка профиля
     profile_path = os.path.join(os.getcwd(), "ozon_user_profile")
     options.add_argument(f"--user-data-dir={profile_path}")
-
-    # Важно: для работы на сервере/бэкенде лучше включать headless режим,
-    # но пока ты тестируешь локально, можно оставить с окном.
-    # options.add_argument("--headless")
-
     driver = None
     try:
         driver = uc.Chrome(options=options, version_main=147)
         driver.get(url)
 
-        # Имитация человека
         time.sleep(random.uniform(5, 8))
         driver.execute_script("window.scrollBy(0, 500)")
         time.sleep(2)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
-        # 1. Название
         name_el = soup.find('h1')
         name = name_el.text.strip() if name_el else "Без названия"
 
-        # 2. Цена
         price = 0
         price_widget = soup.find('div', {'data-widget': 'webPrice'})
 
@@ -46,7 +36,7 @@ def parse_ozon_product(url: str) -> dict:
 
             if valid_prices:
                 unique_prices = sorted(list(set(valid_prices)))
-                price = unique_prices[0]  # Берем наименьшую
+                price = unique_prices[0]
 
         return {
             "name": name,

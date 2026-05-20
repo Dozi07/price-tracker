@@ -12,8 +12,6 @@ from selenium.webdriver.support import expected_conditions as EC
 def get_wb_data(urls):
     options = uc.ChromeOptions()
     options.add_argument("--window-size=1920,1080")
-
-    # Чтобы не плодить папки, используем одну
     profile_path = os.path.join(os.getcwd(), "wb_profile")
     options.add_argument(f"--user-data-dir={profile_path}")
 
@@ -28,30 +26,25 @@ def get_wb_data(urls):
                 print(f"\n--- 🔎 Загрузка: {url} ---")
                 driver.get(url)
 
-                # 1. ЖДЕМ ЗАГРУЗКИ СТРАНИЦЫ (Имитируем человека)
                 time.sleep(random.uniform(5, 7))
 
-                # Прокрутка вниз, чтобы WB "поверил", что мы смотрим товар
                 driver.execute_script("window.scrollBy(0, 400)")
                 time.sleep(1)
 
-                # 2. ПОИСК НАЗВАНИЯ (через самый надежный тег h1)
                 try:
                     name_element = driver.find_element(By.TAG_NAME, "h1")
                     name = name_element.text.strip()
                 except:
                     name = "Название не найдено"
 
-                # 3. ПОИСК ЦЕНЫ (Используем универсальный метод по тексту и классам)
                 price_wallet = "0"
                 price_base = "0"
 
-                # Список возможных путей к цене (WB постоянно их меняет)
                 price_selectors = [
-                    "ins.price-block__final-price",  # Финальная цена
-                    ".price-block__wallet-price",  # Цена с кошельком
-                    ".price-block__content",  # Весь блок цен
-                    ".product-page__price-block"  # Запасной блок
+                    "ins.price-block__final-price",  
+                    ".price-block__wallet-price",  
+                    ".price-block__content", 
+                    ".product-page__price-block"  
                 ]
 
                 found_prices = []
@@ -63,16 +56,12 @@ def get_wb_data(urls):
                         found_prices.extend([int(n) for n in nums if int(n) > 50])
 
                 if found_prices:
-            # Чистим от дублей и сортируем
                     unique_prices = sorted(list(set(found_prices)))
                     price_wallet = unique_prices[0]
                     price_base = unique_prices[1] if len(unique_prices) > 1 else unique_prices[0]
                 else:
-                    # КРАЙНИЙ СЛУЧАЙ: Ищем по всей странице текст с символом ₽
                     try:
-                        # Ищем все элементы, содержащие цифры и знак рубля
                         all_page_text = driver.find_element(By.TAG_NAME, "body").text
-                        # Ищем конструкции типа "1 500 ₽"
                         raw_prices = re.findall(r'(\d[\d\s]*)\s?₽', all_page_text)
                         clean_prices = sorted([int(p.replace(' ', '').replace('\xa0', '')) for p in raw_prices if int(p.replace(' ', '')) > 50])
                         if clean_prices:
@@ -81,7 +70,6 @@ def get_wb_data(urls):
                     except:
                         pass
 
-                # 4. ПОИСК ПРОДАВЦА
                 try:
                     seller_el = driver.find_element(By.CLASS_NAME, "seller-info__name")
                     seller = seller_el.text.strip()
@@ -89,16 +77,10 @@ def get_wb_data(urls):
                     seller = "Wildberries"
 
                 item = {
-                  # 'Товар': name[:50],
                     'Цена с Кошельком': f"{price_wallet} ₽",
                     'Обычная цена': f"{price_base} ₽",
-                    #'Продавец': seller
                 }
                 results.append(item)
-
-                #print(f"✅ Готово: {item['Товар']}")
-
-                #print(f"💰 Цена: {item['Цена с Кошельком']} | База: {item['Обычная цена']}")
                 return item
 
             except Exception as e:
