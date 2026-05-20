@@ -92,14 +92,14 @@ def parse_wb_product(url: str) -> dict:
             driver.quit()
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Тестовая ссылка
-    url = "https://www.wildberries.ru/catalog/235691524/detail.aspx?targetUrl=MI"
-    data = parse_wb_product(url)
+    #url = "https://www.wildberries.ru/catalog/235691524/detail.aspx?targetUrl=MI"
+    #data = parse_wb_product(url)
 
-    print("\n" + "=" * 30)
-    print(f"Товар: {data['name']}")
-    print(f"Цена: {data['price']} ₽")
-    print("=" * 30)
+    #print("\n" + "=" * 30)
+    #print(f"Товар: {data['name']}")
+    #print(f"Цена: {data['price']} ₽")
+    #print("=" * 30)
 
 #https://www.wildberries.ru/catalog/235691524/detail.aspx?targetUrl=MI
