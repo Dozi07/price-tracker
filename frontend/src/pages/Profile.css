@@ -252,3 +252,13 @@
     background: #ff4d4d;
     color: white;
 }
+
+.price-min {
+    font-size: 13px;
+    color: #15a048;
+}
+
+.price-max {
+    font-size: 13px;
+    color: #f33d3d;
+}

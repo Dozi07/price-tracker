@@ -105,6 +105,18 @@ function Profile() {
             })))
         }
     }
+    async function clearCategory(id) {
+        const token = localStorage.getItem("token")
+        const response = await fetch(`http://localhost:8000/clear_category/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        if (response.ok) {
+            setCategories(categories.map(cat =>
+                cat.id === id ? { ...cat, products: [] } : cat
+            ))
+        }
+    }
 
     return (
         <div className="profile">
@@ -135,7 +147,7 @@ function Profile() {
                             <span className="category-name">{cat.name}</span>
                         </div>
                         <div className="category-right">
-                            <button className="cat-clear" onClick={(e) => e.stopPropagation()}>Очистить</button>
+                            <button className="cat-clear" onClick={(e) => { e.stopPropagation(); clearCategory(cat.id) }}>Очистить</button>
                             <button className="cat-delete" onClick={(e) => { e.stopPropagation(); deleteCategory(cat.id) }}>Удалить</button>
                         </div>
                     </div>
@@ -148,6 +160,8 @@ function Profile() {
                                     <div className="product-desc">{p.name}</div>
                                     <div className="product-prices">
                                         <span className="price-tag">{p.price} ₽</span>
+                                        <span className="price-min">min: {p.min_price} ₽</span>
+                                        <span className="price-max">max: {p.max_price} ₽</span>
                                         <button className="delete-product-btn" onClick={() => deleteProduct(p.id)}>Удалить</button>
                                     </div>
                                 </div>
