@@ -1,0 +1,46 @@
+.settings {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.settings h1 {
+    margin-bottom: 40px;
+}
+
+.settings-section {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.settings-section h2 {
+    margin: 0;
+}
+
+.settings-input {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.settings-btn {
+    width: 150px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.settings-btn-delete {
+    width: 180px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
