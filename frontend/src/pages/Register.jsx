@@ -1,6 +1,8 @@
+import LineTracker from "./LineTracker"
 import "./Register.css"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
+
 
 function Register(){
     const navigate = useNavigate()
@@ -31,6 +33,7 @@ function Register(){
 
     return(
         <div className="Register">
+            <LineTracker />
             <div className="frame">
                 <h1>Регистрация</h1>
                 {error && <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>{error}</p>} 

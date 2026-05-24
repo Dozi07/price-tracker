@@ -1,6 +1,7 @@
 import "./Profile.css"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { Settings } from "lucide-react"
 
 function Profile() {
     const navigate = useNavigate()
@@ -121,7 +122,13 @@ function Profile() {
     return (
         <div className="profile">
             <div className="profile_n">
-                <button className="exit" onClick={() => navigate("/")}>Выйти</button>
+                <div className="logo">price<span>tracker</span></div>
+                <div className="profile-nav-right">
+                    <button className="settings-btn-nav" onClick={() => navigate("/settings")}>
+                        <Settings size={20} />
+                    </button>
+                    <button className="exit" onClick={() => navigate("/")}>Выйти</button>
+                </div>
             </div>
 
             <button className="profile-create" onClick={createCategory}>+ Создать категорию</button>

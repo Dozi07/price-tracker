@@ -1,0 +1,25 @@
+:root {
+    --black: #1D2121;
+    --volt: #B9ED00;
+}
+.LineTracker {
+    width: 100%;
+    background: var(--black);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: white;
+}
+
+.logo span {
+    color: var(--volt);
+    text-shadow: 0 0 18px rgba(185, 237, 0, 0.5);
+}
+

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "postgresql://postgres:1111@localhost:5432/price_tracker"
+DATABASE_URL = "postgresql://postgres:123456@localhost:5432/mydb"
 
 engine = create_engine(DATABASE_URL)
 
