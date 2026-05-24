@@ -5,3 +5,4 @@ class ProductOut(BaseModel):
     name : str
     price : int
     url : str
+    url_picture: str
