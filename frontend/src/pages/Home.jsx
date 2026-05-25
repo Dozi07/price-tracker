@@ -6,9 +6,10 @@ function Home(){
     return(
         <div className="home">
 
-             <div className="top-stripe"></div>
-
-            <button className="but_sign" onClick={() => navigate("/login")}>Войти</button>
+            <div className="top-bar">
+                <div className="logo">price<span>tracker</span></div>
+                <button className="but_sign" onClick={() => navigate("/login")}>Войти</button>
+            </div>
 
             <header className="New">
                 <h1>Начните отслеживать товары{" "}

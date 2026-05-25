@@ -1,59 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #ECE9E9;
+    --black: #1D2121;
+    --volt: #B9ED00;
+    --lean: #7182CB;
+    --heat: #FF6716;
+    --grey: #CECECE;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Inter, sans-serif;
+}
+
 .Login {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px;
-    text-align: center;
-    margin-top: 100px;
+    justify-content: flex-start;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(185, 237, 0, 0.18), transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(113, 130, 203, 0.18), transparent 45%),
+        var(--bg);
 }
 
 .login-frame {
-    width: 320px;
+    width: 420px;
     padding: 40px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
+    margin-top: 80px;
 }
 
 .login-frame h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--black);
     margin: 0;
-    color: #273287;
-    font-size: 24px;
 }
 
 .login-btn {
     width: 100%;
-    padding: 12px;
-    background: #273287;
-    color: white;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--volt), #e5ff7a);
     border: none;
-    border-radius: 10px;
+    border-radius: 14px;
     font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 30px rgba(185, 237, 0, 0.25);
 }
 
 .login-btn:hover {
-    background: #d6b4fc;
-    color: #273287;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(185, 237, 0, 0.35);
 }
 
 .login-link {
+    text-align: center;
     font-size: 14px;
-    color: #273287;
-    cursor: pointer;
+    color: var(--black);
+    opacity: 0.7;
     margin: 0;
+    cursor: pointer;
 }
 
 .login-link span {
-    font-weight: 700;
+    color: var(--lean);
+    font-weight: 600;
     text-decoration: underline;
 }
 
 .login-link span:hover {
-    color: #D8E63C;
+    color: var(--volt);
+    opacity: 1;
 }
