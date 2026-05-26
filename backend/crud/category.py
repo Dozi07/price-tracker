@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
-from models.Category import Category
-from schemas.CategoryCreate import CategoryCreate
-from models.Product import Product
-from models.ProductPriceHistory import ProductPriceHistory
+from models.category import Category
+from models.product import Product, ProductPriceHistory
+from schemas.category import CategoryCreate
+
+
 def create_user_category(db: Session, category: CategoryCreate, user_id: int):
     db_category = Category(name=category.name, user_id=user_id)
     db.add(db_category)
