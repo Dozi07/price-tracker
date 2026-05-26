@@ -11,7 +11,8 @@ def parse_yandex_market_product(url: str) -> dict:
     options = uc.ChromeOptions()
     options.add_argument("--window-size=1920,1080")
 
-    # Отключаем картинки для скорости
+    # Отключаем картинки для скорости загрузки самой страницы
+    # (Сама ссылка на картинку в коде страницы при этом останется)
     options.add_argument("--blink-settings=imagesEnabled=false")
 
     profile_path = os.path.join(os.getcwd(), "yandex_market_profile")
@@ -19,7 +20,7 @@ def parse_yandex_market_product(url: str) -> dict:
 
     driver = None
     try:
-        driver = uc.Chrome(options=options)
+        driver = uc.Chrome(options=options, version_main=147)
         driver.get(url)
 
         print("Загрузка страницы... Ожидаем полную прогрузку скриптов Яндекса...")
@@ -33,7 +34,7 @@ def parse_yandex_market_product(url: str) -> dict:
             input("После появления карточки товара НАЖМИТЕ ENTER ТУТ...")
             time.sleep(2)
 
-        # 1. Парсинг названия
+        # 1. ПАРСИНГ НАЗВАНИЯ
         name = "Без названия"
         try:
             wait = WebDriverWait(driver, 10)
@@ -46,11 +47,10 @@ def parse_yandex_market_product(url: str) -> dict:
             except Exception:
                 pass
 
-        # 2. ПАРСИНГ ЦЕНЫ (Альтернативные методы через атрибуты)
+        # 2. ПАРСИНГ ЦЕНЫ
         price = 0
 
-        # --- МЕТОД 1: Ищем мета-теги SEO (Микроразметка Schema.org) ---
-        # Яндекс почти всегда встраивает цену в мета-теги для поисковиков Google/Яндекс в чистом виде.
+        # --- МЕТОД 1: Ищем мета-теги SEO ---
         try:
             meta_price = driver.find_element(By.XPATH, "//meta[@property='og:price:amount' or @itemprop='price']")
             price_content = meta_price.get_attribute("content")
@@ -60,7 +60,6 @@ def parse_yandex_market_product(url: str) -> dict:
                     price = int(clean_meta_price)
                     print(f"✓ Цена успешно извлечена из мета-тегов карточки: {price} ₽")
 
-            # Запасной мета-тег, если первый пустой
             if price == 0:
                 meta_price_alt = driver.find_element(By.XPATH,
                                                      "//meta[contains(@name, 'price') or contains(@property, 'price')]")
@@ -70,11 +69,10 @@ def parse_yandex_market_product(url: str) -> dict:
                     if clean_alt:
                         price = int(clean_alt)
         except Exception:
-            pass  # Если мета-тегов нет, идем дальше
+            pass
 
-        # --- МЕТОД 2: Если мета-теги не сработали, ищем по атрибутам элементов ---
+        # --- МЕТОД 2: По атрибутам элементов ---
         if price == 0:
-            # Селекторы, где цена может лежать внутри атрибутов value, data-value или data-price
             attribute_selectors = [
                 "[data-auto='price-value']",
                 "[data-auto='mainPrice']",
@@ -86,7 +84,6 @@ def parse_yandex_market_product(url: str) -> dict:
                 try:
                     elements = driver.find_elements(By.CSS_SELECTOR, selector)
                     for el in elements:
-                        # Проверяем не text, а внутренние свойства тега, куда Яндекс пишет чистые цифры
                         for attr in ["value", "data-value", "data-price", "content"]:
                             val = el.get_attribute(attr)
                             if val and any(char.isdigit() for char in val):
@@ -102,22 +99,19 @@ def parse_yandex_market_product(url: str) -> dict:
                 except:
                     continue
 
-        # --- МЕТОД 3: Экстренный разбор сырого HTML (Regex по JSON-данным страницы) ---
+        # --- МЕТОД 3: Regex по JSON-данным ---
         if price == 0:
             print("⚠️ Стандартные методы не дали результат. Запуск глубокого сканирования кода страницы...")
             html_source = driver.page_source
 
-            # Ищем в коде страницы JSON-структуры Яндекса, где упоминается "price" или "currentPrice"
-            # Обычно это блоки типа "currentPrice":{"value":10490} или "price":{"value":10490}
             price_matches = re.findall(r'"price"\s*:\s*\{\s*"value"\s*:\s*(\d+)', html_source)
             if not price_matches:
                 price_matches = re.findall(r'"currentPrice"\s*:\s*\{\s*"value"\s*:\s*(\d+)', html_source)
 
             if price_matches:
-                # Берем первое найденное число, исключая слишком маленькие (типа 0 или 1)
                 for potential_price in price_matches:
                     p_int = int(potential_price)
-                    if p_int > 100:  # Отсекаем ID или флаги
+                    if p_int > 100:
                         price = p_int
                         print(f"✓ Цена успешно извлечена из скрытого JSON страницы: {price} ₽")
                         break
@@ -125,26 +119,42 @@ def parse_yandex_market_product(url: str) -> dict:
         if price == 0:
             print("❌ Не удалось извлечь цену ни одним из способов. Возможно, товара нет в наличии.")
 
+        # 3. ПАРСИНГ КАРТИНКИ
+        image_url = ""
+        try:
+            # Метод 1: Ищем в мета-тегах (работает как на Ozon)
+            meta_img = driver.find_element(By.XPATH, "//meta[@property='og:image']")
+            img_content = meta_img.get_attribute("content")
+            if img_content:
+                image_url = img_content
+                print("✓ Картинка успешно извлечена из og:image")
+        except Exception:
+            try:
+                # Метод 2: Ищем через микроразметку товара
+                img_el = driver.find_element(By.XPATH, "//*[@itemprop='image']")
+                img_src = img_el.get_attribute("src")
+                if not img_src:
+                    img_src = img_el.get_attribute("content")
+                if img_src:
+                    image_url = img_src
+                    print("✓ Картинка успешно извлечена из микроразметки")
+            except Exception:
+                print("❌ Не удалось найти картинку товара.")
+
+        # ВОЗВРАЩАЕМ ЕДИНЫЙ СЛОВАРЬ (как в Ozon)
         return {
             "name": name,
-            "price": price
+            "price": price,
+            "image_url": image_url
         }
 
     except Exception as e:
         print(f"Ошибка выполнения: {e}")
-        return {"name": "Ошибка", "price": 0}
+        return {
+            "name": "Ошибка парсинга ЯМ",
+            "price": 0,
+            "image_url": ""
+        }
     finally:
         if driver:
             driver.quit()
-
-
-#if __name__ == "__main__":
-   # url = "https://market.yandex.ru/card/nike-air-monarch-4-cushioning-breathable-lightweight-casual-shoes-mens-gray-41/4739793306?do-waremd5=YtwNiNr1zsGH1rAvMjHOUA&sponsored=1&cpc=sry9wyIdfwDpWJ1VMVnlFU8a1GoU10mi1K73L1xmXroNxvU8MNnJ21j-PKfTJSFamHDS8mYJeSJIMAFsFVP27Q0N8uZr8W3Iwa6pWpnwuuOd6n6P82owSkv3qicOogaWV8qvKCaFmMHlnduUK8OqQ_eriThbZUaQkPue9TBbjp_CDOowAz2ZMh49KcUibtUvFUBxEootGPx4Jbu03gTsXqLJTNG4tQchDlle16T96vAis17YeojC9uso7baYnYw_jK13AqQWsnx7ZbXcAml0RLA_H69FQYsIjOFga9-EWYCV4bnFwg-ds3Zc_tAFkMsM&cc=CjIxNzc5MjY1NzA1Njc2LzczZWU3YzQyOWYyODA5Zjk0OWQ2MTkyMTRjNTIzZmQzLzEvNxCzAYB95u0G&resale_goods=resale_new&ultima=1&show-uid=17792657060081590066206016&showUid=17792657060081590066206016&from-show-uid=17792657060081590066206016"
-   # data = parse_yandex_market_product(url)
-    #print(f"\n==============================")
-    #print(f"Итог парсинга:")
-    #print(f"Товар: {data['name']}")
-    #print(f"Цена:  {data['price']} ₽")
-
-
-#https://market.yandex.ru/card/nike-air-monarch-4-cushioning-breathable-lightweight-casual-shoes-mens-gray-41/4739793306?do-waremd5=YtwNiNr1zsGH1rAvMjHOUA&sponsored=1&cpc=sry9wyIdfwDpWJ1VMVnlFU8a1GoU10mi1K73L1xmXroNxvU8MNnJ21j-PKfTJSFamHDS8mYJeSJIMAFsFVP27Q0N8uZr8W3Iwa6pWpnwuuOd6n6P82owSkv3qicOogaWV8qvKCaFmMHlnduUK8OqQ_eriThbZUaQkPue9TBbjp_CDOowAz2ZMh49KcUibtUvFUBxEootGPx4Jbu03gTsXqLJTNG4tQchDlle16T96vAis17YeojC9uso7baYnYw_jK13AqQWsnx7ZbXcAml0RLA_H69FQYsIjOFga9-EWYCV4bnFwg-ds3Zc_tAFkMsM&cc=CjIxNzc5MjY1NzA1Njc2LzczZWU3YzQyOWYyODA5Zjk0OWQ2MTkyMTRjNTIzZmQzLzEvNxCzAYB95u0G&resale_goods=resale_new&ultima=1&show-uid=17792657060081590066206016&showUid=17792657060081590066206016&from-show-uid=17792657060081590066206016
