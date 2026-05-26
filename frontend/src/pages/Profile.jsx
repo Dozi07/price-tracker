@@ -1,6 +1,7 @@
 import "./Profile.css"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { Settings } from "lucide-react"
 
 function Profile() {
     const navigate = useNavigate()
@@ -8,113 +9,156 @@ function Profile() {
     const [showCategoryInput, setShowCategoryInput] = useState(false)
     const [categoryName, setCategoryName] = useState("")
     const [newProductUrl, setNewProductUrl] = useState("")
+    const [selectedMarketplace, setSelectedMarketplace] = useState("")
 
-    // 1. Скачиваем категории (вместе с товарами) из БД
     async function fetchCategories() {
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8000/categories", {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Добавляем к данным из БД свойства для визуала (открыта ли вкладка)
-                const categoriesWithUI = data.map(cat => ({
-                    ...cat,
-                    open: true,
-                    addingProduct: false
-                }));
-                setCategories(categoriesWithUI);
-            } else if (response.status === 401) {
-                navigate("/login");
-            }
-        } catch (error) {
-            console.error("Ошибка загрузки категорий:", error);
+        const token = localStorage.getItem("token")
+        const response = await fetch("http://localhost:8000/categories", {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        if (response.ok) {
+            const data = await response.json()
+            setCategories(data.map(cat => ({
+                ...cat,
+                open: true,
+                addingProduct: false
+            })))
+        } else if (response.status === 401) {
+            navigate("/login")
         }
     }
 
-    // Вызываем при загрузке страницы
     useEffect(() => {
-        fetchCategories();
-    }, []);
+        fetchCategories()
+    }, [])
 
-    // 2. Создание новой категории в БД
+    function createCategory() {
+        setShowCategoryInput(true)
+    }
+
     async function saveCategory() {
-        if (categoryName.trim() === "") return;
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8000/categories", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ name: categoryName })
-            });
-
-            if (response.ok) {
-                setCategoryName("");
-                setShowCategoryInput(false);
-                fetchCategories(); // Перезапрашиваем список после создания
-            }
-        } catch (error) {
-            console.error("Ошибка создания категории:", error);
+        if (categoryName.trim() === "") return
+        const token = localStorage.getItem("token")
+        const response = await fetch("http://localhost:8000/categories", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ name: categoryName })
+        })
+        if (response.ok) {
+            setCategoryName("")
+            setShowCategoryInput(false)
+            fetchCategories()
         }
     }
 
-    // 3. Добавление товара (теперь передаем category_id)
-    async function handleAddProduct(categoryId) {
-        if (!newProductUrl) return;
-
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8000/add_product", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                // ВАЖНО: теперь отправляем и url, и category_id
-                body: JSON.stringify({
-                    url: newProductUrl,
-                    category_id: categoryId
-                })
-            });
-
-            if (response.ok) {
-                setNewProductUrl("");
-                fetchCategories(); // Перезапрашиваем всё, чтобы товар появился в списке
-            } else {
-                const err = await response.json();
-                alert("Ошибка: " + JSON.stringify(err));
-            }
-        } catch (error) {
-            console.error("Ошибка добавления товара:", error);
-        }
-    }
-
-    // Визуальные переключалки
-    function createCategory() { setShowCategoryInput(true); }
     function toggleCategory(id) {
-        setCategories(categories.map(cat => cat.id === id ? { ...cat, open: !cat.open } : cat));
+        setCategories(categories.map(cat =>
+            cat.id === id ? { ...cat, open: !cat.open } : cat
+        ))
     }
+
     function toggleAddProduct(id) {
-        setCategories(categories.map(cat => cat.id === id ? { ...cat, addingProduct: !cat.addingProduct } : cat));
+        setCategories(categories.map(cat =>
+            cat.id === id ? { ...cat, addingProduct: !cat.addingProduct } : cat
+        ))
+    }
+
+    async function deleteCategory(id) {
+        const token = localStorage.getItem("token")
+        const response = await fetch(`http://localhost:8000/categories/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        if (response.ok) {
+            setCategories(categories.filter(cat => cat.id !== id))
+        }
+    }
+//поменял тут
+    async function addProduct(categoryId) {
+        if (newProductUrl.trim() === "") return;
+
+
+        if (selectedMarketplace === "") {
+            alert("Пожалуйста, выберите маркетплейс");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8000/add_product", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                url: newProductUrl,
+                category_id: categoryId,
+                marketplace_id: parseInt(selectedMarketplace) // Передаем выбранную цифру
+            })
+        });
+
+        if (response.ok) {
+            setNewProductUrl("");
+            setSelectedMarketplace(""); // Сбрасываем выбор после успешного добавления
+            fetchCategories();
+        } else {
+            // Если бэкенд вернул ошибку (например, 400), показываем её
+            const errData = await response.json();
+            alert(errData.detail || "Ошибка при добавлении товара");
+        }
+    }
+    async function deleteProduct(productId) {
+        const token = localStorage.getItem("token")
+        const response = await fetch(`http://localhost:8000/products/${productId}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        if (response.ok) {
+            setCategories(categories.map(cat => ({
+                ...cat,
+                products: cat.products.filter(p => p.id !== productId)
+            })))
+        }
+    }
+    async function clearCategory(id) {
+        const token = localStorage.getItem("token")
+        const response = await fetch(`http://localhost:8000/clear_category/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        if (response.ok) {
+            setCategories(categories.map(cat =>
+                cat.id === id ? { ...cat, products: [] } : cat
+            ))
+        }
     }
 
     return (
         <div className="profile">
             <div className="profile_n">
-                <button className="exit" onClick={() => { localStorage.removeItem("token"); navigate("/"); }}>Выйти</button>
+                <div className="logo">price<span>tracker</span></div>
+                <div className="profile-nav-right">
+                    <button className="settings-btn-nav" onClick={() => navigate("/settings")}>
+                        <Settings size={20} />
+                    </button>
+                    <button className="exit" onClick={() => navigate("/")}>Выйти</button>
+                </div>
             </div>
 
             <button className="profile-create" onClick={createCategory}>+ Создать категорию</button>
 
             {showCategoryInput && (
                 <div className="category-form">
-                    <input type="text" placeholder="Название категории" className="category-input" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Название категории"
+                        className="category-input"
+                        value={categoryName}
+                        onChange={(e) => setCategoryName(e.target.value)}
+                    />
                     <button className="category-save" onClick={saveCategory}>Сохранить</button>
                 </div>
             )}
@@ -126,19 +170,27 @@ function Profile() {
                             <span className="arrow">{cat.open ? "▼" : "▶"}</span>
                             <span className="category-name">{cat.name}</span>
                         </div>
+                        <div className="category-right">
+                            <button className="cat-clear" onClick={(e) => { e.stopPropagation(); clearCategory(cat.id) }}>Очистить</button>
+                            <button className="cat-delete" onClick={(e) => { e.stopPropagation(); deleteCategory(cat.id) }}>Удалить</button>
+                        </div>
                     </div>
 
                     {cat.open && (
                         <div className="category-body">
-                            {cat.products && cat.products.map((p) => (
-                                <div className="product-card" key={p.id}>
-                                    <div className="product-img"></div>
-                                    <div className="product-desc">
-                                        <strong>{p.name}</strong><br/>
-                                        <small><a href={p.url} target="_blank" rel="noreferrer">Ссылка на товар</a></small>
-                                    </div>
+                            {cat.products.map((p, i) => (
+                                <div className="product-card" key={i}>
+                                    <img
+                                        className="product-img"
+                                        src={p.image_url}
+                                        alt={p.name}
+                                    />
+                                    <div className="product-desc">{p.name}</div>
                                     <div className="product-prices">
                                         <span className="price-tag">{p.price} ₽</span>
+                                        <span className="price-min">min: {p.min_price} ₽</span>
+                                        <span className="price-max">max: {p.max_price} ₽</span>
+                                        <button className="delete-product-btn" onClick={() => deleteProduct(p.id)}>Удалить</button>
                                     </div>
                                 </div>
                             ))}
@@ -152,9 +204,22 @@ function Profile() {
                                         value={newProductUrl}
                                         onChange={(e) => setNewProductUrl(e.target.value)}
                                     />
-                                    <button className="product-confirm" onClick={() => handleAddProduct(cat.id)}>Добавить</button>
+                                    <select 
+                                        className="marketplace-select"
+                                        value={selectedMarketplace}
+                                        onChange={(e) => setSelectedMarketplace(e.target.value)}
+                                    >
+                                        <option value="">Выберите маркетплейс</option>
+                                        {/* Устанавливаем цифры, которые ждет бэкенд */}
+                                        <option value="1">OZON</option>
+                                        <option value="2">Wildberries</option>
+                                        <option value="3">Яндекс Маркет</option>
+                                    </select>
+                                    <button className="product-confirm" onClick={() => addProduct(cat.id)}>Добавить</button>
                                 </div>
                             )}
+
+                        
                             <button className="cat-add" onClick={() => toggleAddProduct(cat.id)}>+ Добавить товар</button>
                         </div>
                     )}

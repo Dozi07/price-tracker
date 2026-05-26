@@ -1,3 +1,4 @@
+import LineTracker from "./LineTracker"
 import "./Login.css"
 import { useNavigate } from "react-router-dom"
 import React, { useState } from 'react';
@@ -29,6 +30,7 @@ function Login() {
     }
     return (
         <div className="Login">
+            <LineTracker />
             <div className="login-frame">
                 <h1>Вход</h1>
                 <input type="email" placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)}/>

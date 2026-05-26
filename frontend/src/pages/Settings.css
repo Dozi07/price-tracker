@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #ECE9E9;
+    --black: #1D2121;
+    --volt: #B9ED00;
+    --lean: #7182CB;
+    --heat: #FF6716;
+    --grey: #CECECE;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Inter, sans-serif;
+}
+
+.settings {
+    min-height: 100vh;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: var(--black);
+}
+
+.settings h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--black);
+}
+
+.settings-back {
+    background: none;
+    border: none;
+    color: var(--lean);
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 0;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.settings-back:hover {
+    color: var(--volt);
+}
+
+.settings-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.settings-card:hover {
+    border-color: rgba(185, 237, 0, 0.4);
+    box-shadow: 0 10px 30px rgba(185, 237, 0, 0.08);
+}
+
+.settings-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 4px;
+}
+
+.settings-input {
+    padding: 12px 16px;
+    border: 1px solid var(--grey);
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.8);
+    transition: border 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.settings-input:focus {
+    border-color: var(--lean);
+}
+
+.settings-btn {
+    width: 150px;
+    padding: 12px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--volt), #e5ff7a);
+    color: var(--black);
+    border: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 30px rgba(185, 237, 0, 0.2);
+}
+
+.settings-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(185, 237, 0, 0.3);
+}
+
+.settings-warning {
+    color: var(--heat);
+    font-size: 14px;
+    margin: 0;
+}
+
+.settings-btn-delete {
+    width: 180px;
+    padding: 12px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: var(--heat);
+    border: 1px solid var(--heat);
+    transition: all 0.25s ease;
+}
+
+.settings-btn-delete:hover {
+    background: var(--heat);
+    color: white;
+    transform: translateY(-2px);
+}
