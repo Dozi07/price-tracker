@@ -5,4 +5,5 @@ class ProductCreate(BaseModel):
     name: str
     price: int
     url: str
-    user_id : int
+    image_url: str
+    user_id: int

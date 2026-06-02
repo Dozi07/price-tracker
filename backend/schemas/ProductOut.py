@@ -6,6 +6,7 @@ class ProductOut(BaseModel):
     price : int
     url : str
     category_id: int
+    image_url: str
     min_price: int
     max_price: int
 

@@ -10,11 +10,15 @@ from models.Users import User
 #    db.refresh(new_product)
 #    return new_product
 
-def create_product(db: Session, product_data: dict):
+from models.Product import Product
+
+
+def create_product(db, product_data: dict):
     db_product = Product(
         name=product_data["name"],
         price=product_data["price"],
         url=product_data["url"],
+        image_url=product_data.get("image_url", ""),
         user_id=product_data["user_id"],
         category_id=product_data["category_id"]
     )
@@ -22,5 +26,5 @@ def create_product(db: Session, product_data: dict):
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
-    return db_product
 
+    return db_product

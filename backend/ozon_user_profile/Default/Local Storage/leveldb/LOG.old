@@ -1,2 +1,5 @@
-2026/05/24-13:57:58.839 3dfc Creating DB C:\Users\Nastya\Progect_case5\backend\ozon_user_profile\Default\Local Storage\leveldb since it was missing.
-2026/05/24-13:57:58.855 3dfc Reusing MANIFEST C:\Users\Nastya\Progect_case5\backend\ozon_user_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/05/29-23:25:14.416 5f88 Reusing MANIFEST C:\Users\Nastya\Progect_case5\backend\ozon_user_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/05/29-23:25:14.422 5f88 Recovering log #3
+2026/05/29-23:25:14.424 5f88 Level-0 table #3: started
+2026/05/29-23:25:14.430 5f88 Level-0 table #3: 161513 bytes OK
+2026/05/29-23:25:14.435 5f88 Delete type=0 #3

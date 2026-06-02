@@ -163,7 +163,11 @@ function Profile() {
                         <div className="category-body">
                             {cat.products.map((p, i) => (
                                 <div className="product-card" key={i}>
-                                    <div className="product-img"></div>
+                                    <img
+                                        className="product-img"
+                                        src={p.image_url}
+                                        alt={p.name}
+                                    />
                                     <div className="product-desc">{p.name}</div>
                                     <div className="product-prices">
                                         <span className="price-tag">{p.price} ₽</span>

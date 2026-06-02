@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');*/
 
 :root {
     --bg: #ECE9E9;
@@ -121,6 +121,8 @@
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     transition: border 0.2s ease;
+    margin-left:60px;
+
 }
 
 .category-input:focus {

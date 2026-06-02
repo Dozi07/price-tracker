@@ -11,6 +11,7 @@ class Product(Base):
     price = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
+    image_url = Column(String, nullable=True)
 
     category_id = Column(Integer, ForeignKey("category.id"))
 
