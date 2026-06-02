@@ -76,21 +76,38 @@ function Profile() {
             setCategories(categories.filter(cat => cat.id !== id))
         }
     }
-
+//поменял тут
     async function addProduct(categoryId) {
-        if (newProductUrl.trim() === "") return
-        const token = localStorage.getItem("token")
+        if (newProductUrl.trim() === "") return;
+
+
+        if (selectedMarketplace === "") {
+            alert("Пожалуйста, выберите маркетплейс");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:8000/add_product", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ url: newProductUrl, category_id: categoryId })
-        })
+            body: JSON.stringify({
+                url: newProductUrl,
+                category_id: categoryId,
+                marketplace_id: parseInt(selectedMarketplace) // Передаем выбранную цифру
+            })
+        });
+
         if (response.ok) {
-            setNewProductUrl("")
-            fetchCategories()
+            setNewProductUrl("");
+            setSelectedMarketplace(""); // Сбрасываем выбор после успешного добавления
+            fetchCategories();
+        } else {
+            // Если бэкенд вернул ошибку (например, 400), показываем её
+            const errData = await response.json();
+            alert(errData.detail || "Ошибка при добавлении товара");
         }
     }
     async function deleteProduct(productId) {
@@ -193,9 +210,10 @@ function Profile() {
                                         onChange={(e) => setSelectedMarketplace(e.target.value)}
                                     >
                                         <option value="">Выберите маркетплейс</option>
-                                        <option value="wildberries">Wildberries</option>
-                                        <option value="ozon">OZON</option>
-                                        <option value="yandex">Яндекс Маркет</option>
+                                        {/* Устанавливаем цифры, которые ждет бэкенд */}
+                                        <option value="1">OZON</option>
+                                        <option value="2">Wildberries</option>
+                                        <option value="3">Яндекс Маркет</option>
                                     </select>
                                     <button className="product-confirm" onClick={() => addProduct(cat.id)}>Добавить</button>
                                 </div>

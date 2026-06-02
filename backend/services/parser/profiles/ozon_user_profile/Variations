@@ -1,0 +1,5 @@
+<<<<<<< HEAD:backend/ozon_user_profile/Variations
+{"user_experience_metrics.stability.exited_cleanly":false,"variations_crash_streak":7}
+=======
+{"user_experience_metrics.stability.exited_cleanly":false,"variations_crash_streak":12}
+>>>>>>> b94c4ea33b4094f7da2a7307a67e39f7b063bf9a:backend/services/parser/profiles/ozon_user_profile/Variations
