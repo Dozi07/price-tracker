@@ -1,0 +1,16 @@
+# Виртуальное окружение
+venv/
+env/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Профили браузеров для парсеров
+ozon_user_profile/
+wb_user_profile/
+yandex_market_profile/
+
+# Файлы сред (если появятся)
+.env

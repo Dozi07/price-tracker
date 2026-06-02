@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2026/05/29-23:30:07.675 3410 Reusing MANIFEST C:\Users\Nastya\Progect_case5\backend\ozon_user_profile\Default\Local Storage\leveldb/MANIFEST-000001
 2026/05/29-23:30:07.687 3410 Recovering log #4
 2026/05/29-23:30:07.695 3410 Reusing old log C:\Users\Nastya\Progect_case5\backend\ozon_user_profile\Default\Local Storage\leveldb/000004.log 
+=======
+2026/05/25-17:08:59.315 5d3c Reusing MANIFEST D:\t1\pythonProject1\price-tracker\backend\ozon_user_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/05/25-17:08:59.319 5d3c Recovering log #3
+2026/05/25-17:08:59.320 5d3c Reusing old log D:\t1\pythonProject1\price-tracker\backend\ozon_user_profile\Default\Local Storage\leveldb/000003.log 
+>>>>>>> 50aa452f6535dadd00353d92adca029afd3fd947
