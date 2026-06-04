@@ -190,7 +190,9 @@ function Profile() {
                                                     src={bestProduct.image_url}
                                                     alt={bestProduct.name}
                                                 />
-                                                <div className="product-desc">{bestProduct.name}</div>
+                                                <a href={bestProduct.url} target="_blank" rel="noopener noreferrer" className="product-desc product-link">
+                                                    {bestProduct.name}
+                                                </a>
                                                 <div className="product-prices">
                                                     <span className="price-tag">{bestProduct.price} ₽</span>
                                                     <span className="price-min">min: {bestProduct.min_price} ₽</span>
@@ -211,7 +213,9 @@ function Profile() {
                                                     src={p.image_url}
                                                     alt={p.name}
                                                 />
-                                                <div className="product-desc">{p.name}</div>
+                                                <a href={p.url} target="_blank" rel="noopener noreferrer" className="product-desc product-link">
+                                                    {p.name}
+                                                </a>
                                                 <div className="product-prices">
                                                     <span className="price-tag">{p.price} ₽</span>
                                                     <span className="price-min">min: {p.min_price} ₽</span>
