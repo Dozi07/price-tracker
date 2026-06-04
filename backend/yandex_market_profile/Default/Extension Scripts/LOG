@@ -1,2 +1,4 @@
-2026/05/26-18:44:43.842 65cc Creating DB D:\t1\pythonProject1\price-tracker\backend\yandex_market_profile\Default\Extension Scripts since it was missing.
-2026/05/26-18:44:44.682 65cc Reusing MANIFEST D:\t1\pythonProject1\price-tracker\backend\yandex_market_profile\Default\Extension Scripts/MANIFEST-000001
+2026/06/02-23:43:44.424 1f74 Creating DB C:\Users\Nastya\Progect_case5\backend\yandex_market_profile\Default\Extension Scripts since it was missing.
+2026/06/02-23:43:44.433 1f74 Reusing MANIFEST C:\Users\Nastya\Progect_case5\backend\yandex_market_profile\Default\Extension Scripts/MANIFEST-000001
+2026/06/02-23:43:44.434 1f74 Recovering log #3
+2026/06/02-23:43:44.435 1f74 Reusing old log C:\Users\Nastya\Progect_case5\backend\yandex_market_profile\Default\Extension Scripts/000003.log 
