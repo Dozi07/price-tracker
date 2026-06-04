@@ -76,7 +76,7 @@ function Profile() {
             setCategories(categories.filter(cat => cat.id !== id))
         }
     }
-//поменял тут
+
     async function addProduct(categoryId) {
         if (newProductUrl.trim() === "") return;
 
@@ -96,16 +96,16 @@ function Profile() {
             body: JSON.stringify({
                 url: newProductUrl,
                 category_id: categoryId,
-                marketplace_id: parseInt(selectedMarketplace) // Передаем выбранную цифру
+                marketplace_id: parseInt(selectedMarketplace) 
             })
         });
 
         if (response.ok) {
             setNewProductUrl("");
-            setSelectedMarketplace(""); // Сбрасываем выбор после успешного добавления
+            setSelectedMarketplace(""); 
             fetchCategories();
         } else {
-            // Если бэкенд вернул ошибку (например, 400), показываем её
+            
             const errData = await response.json();
             alert(errData.detail || "Ошибка при добавлении товара");
         }
@@ -178,22 +178,51 @@ function Profile() {
 
                     {cat.open && (
                         <div className="category-body">
-                            {cat.products.map((p, i) => (
-                                <div className="product-card" key={i}>
-                                    <img
-                                        className="product-img"
-                                        src={p.image_url}
-                                        alt={p.name}
-                                    />
-                                    <div className="product-desc">{p.name}</div>
-                                    <div className="product-prices">
-                                        <span className="price-tag">{p.price} ₽</span>
-                                        <span className="price-min">min: {p.min_price} ₽</span>
-                                        <span className="price-max">max: {p.max_price} ₽</span>
-                                        <button className="delete-product-btn" onClick={() => deleteProduct(p.id)}>Удалить</button>
-                                    </div>
-                                </div>
-                            ))}
+                            {cat.products.length > 0 && (
+                                <>
+                                    {(() => {
+                                        const bestProduct = cat.products.reduce((min, p) => p.price < min.price ? p : min);
+                                        return (
+                                            <div className="product-card best-product">
+                                                <div className="best-badge">⭐ ЛУЧШАЯ ЦЕНА</div>
+                                                <img
+                                                    className="product-img"
+                                                    src={bestProduct.image_url}
+                                                    alt={bestProduct.name}
+                                                />
+                                                <div className="product-desc">{bestProduct.name}</div>
+                                                <div className="product-prices">
+                                                    <span className="price-tag">{bestProduct.price} ₽</span>
+                                                    <span className="price-min">min: {bestProduct.min_price} ₽</span>
+                                                    <span className="price-max">max: {bestProduct.max_price} ₽</span>
+                                                    <button className="delete-product-btn" onClick={() => deleteProduct(bestProduct.id)}>Удалить</button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {cat.products.map((p, i) => {
+                                        const bestProduct = cat.products.reduce((min, prod) => prod.price < min.price ? prod : min);
+                                        if (p.id === bestProduct.id) return null;
+                                        return (
+                                            <div className="product-card" key={i}>
+                                                <img
+                                                    className="product-img"
+                                                    src={p.image_url}
+                                                    alt={p.name}
+                                                />
+                                                <div className="product-desc">{p.name}</div>
+                                                <div className="product-prices">
+                                                    <span className="price-tag">{p.price} ₽</span>
+                                                    <span className="price-min">min: {p.min_price} ₽</span>
+                                                    <span className="price-max">max: {p.max_price} ₽</span>
+                                                    <button className="delete-product-btn" onClick={() => deleteProduct(p.id)}>Удалить</button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </>
+                            )}
 
                             {cat.addingProduct && (
                                 <div className="add-product-form">
@@ -210,7 +239,6 @@ function Profile() {
                                         onChange={(e) => setSelectedMarketplace(e.target.value)}
                                     >
                                         <option value="">Выберите маркетплейс</option>
-                                        {/* Устанавливаем цифры, которые ждет бэкенд */}
                                         <option value="1">OZON</option>
                                         <option value="2">Wildberries</option>
                                         <option value="3">Яндекс Маркет</option>
