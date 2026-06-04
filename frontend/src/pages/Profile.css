@@ -96,7 +96,7 @@
     transition: all 0.25s ease;
     box-shadow: 0 10px 30px rgba(185, 237, 0, 0.25);
     margin-bottom: 24px;
-    margin-left: 80px;
+    margin-left: 230px;
 }
 
 .profile-create:hover {
@@ -304,13 +304,13 @@
 }
 
 .delete-product-btn {
-    height: 30px;
-    padding: 0 14px;
+    height: 38px;
+    padding: 0 18px;
     background: transparent;
     color: var(--heat);
     border: 1px solid var(--heat);
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
