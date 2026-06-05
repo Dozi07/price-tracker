@@ -2,6 +2,7 @@ import "./Profile.css"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { Settings } from "lucide-react"
+import Notifications from "./Notifications"
 
 function Profile() {
     const navigate = useNavigate()
@@ -141,6 +142,7 @@ function Profile() {
             <div className="profile_n">
                 <div className="logo">price<span>tracker</span></div>
                 <div className="profile-nav-right">
+                    <Notifications />
                     <button className="settings-btn-nav" onClick={() => navigate("/settings")}>
                         <Settings size={20} />
                     </button>
