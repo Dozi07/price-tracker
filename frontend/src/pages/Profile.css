@@ -96,7 +96,7 @@
     transition: all 0.25s ease;
     box-shadow: 0 10px 30px rgba(185, 237, 0, 0.25);
     margin-bottom: 24px;
-    margin-left: 80px;
+    margin-left: 230px;
 }
 
 .profile-create:hover {
@@ -122,6 +122,7 @@
     backdrop-filter: blur(10px);
     transition: border 0.2s ease;
     margin-left:60px;
+
 }
 
 .category-input:focus {
@@ -153,8 +154,8 @@
     backdrop-filter: blur(12px);
     overflow: hidden;
     transition: all 0.3s ease;
-    margin-left:80px;
-    margin-right:80px;
+    margin-left:230px;
+    margin-right:230px;
 }
 
 .category:hover {
@@ -241,12 +242,14 @@
 .product-card {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 16px;
-    padding: 16px;
+    padding: 20px;
     transition: all 0.2s ease;
+    height: 300px;
+
 }
 
 .product-card:hover {
@@ -255,8 +258,8 @@
 }
 
 .product-img {
-    width: 80px;
-    height: 80px;
+    width: 190px;
+    height: 250px;
     background: var(--grey);
     border-radius: 12px;
     flex-shrink: 0;
@@ -264,47 +267,50 @@
 
 .product-desc {
     flex: 1;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--black);
+    margin-right: auto;
+    align-self: flex-start;
 }
 
 .product-prices {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 6px;
+    gap: 30px;
+    margin-right: 20px;
 }
 
 .price-tag {
     background: var(--black);
     color: white;
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 999px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
 .price-min {
-    font-size: 13px;
+    font-size: 16px;
     color: #16a34a;
     font-weight: 500;
 }
 
 .price-max {
-    font-size: 13px;
+    font-size: 16px;
     color: var(--heat);
     font-weight: 500;
 }
 
 .delete-product-btn {
-    height: 30px;
-    padding: 0 14px;
+    height: 38px;
+    padding: 0 18px;
     background: transparent;
     color: var(--heat);
     border: 1px solid var(--heat);
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -387,11 +393,85 @@
     color: white;
     border-color: var(--lean);
 }
+.best-product {
+    border: 2px solid var(--volt);
+    background: linear-gradient(135deg, rgba(185, 237, 0, 0.1), rgba(255, 255, 255, 0.9));
+    position: relative;
+}
 
-.product-img {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
+.best-badge {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--volt);
+    color: var(--black);
+    padding: 6px 14px;
     border-radius: 12px;
-    background: #f3f3f3;
+    font-size: 12px;
+    font-weight: 700;
+}
+.product-link {
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.product-link:hover {
+    color: var(--lean);
+}
+
+.update-prices-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 2px solid var(--volt);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 15px; /* отступ от колокольчика */
+}
+
+.update-prices-btn:hover:not(:disabled) {
+    background-color: var(--volt);
+    box-shadow: 0 0 15px rgba(185, 237, 0, 0.4);
+}
+
+.update-prices-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: var(--grey);
+}
+
+/* Анимация вращения иконки */
+.update-prices-btn.spinning svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Стили для карточки с пометкой "Лучшая цена" */
+.best-product {
+    border: 2px solid var(--volt) !important;
+    position: relative;
+}
+
+.best-badge {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--volt);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
 }

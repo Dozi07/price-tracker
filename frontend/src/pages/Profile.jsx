@@ -1,7 +1,9 @@
 import "./Profile.css"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { Settings } from "lucide-react"
+import { Settings, RefreshCw, Bell } from "lucide-react" // Добавили RefreshCw и Bell
+
+import Notifications from "./Notifications";
 
 function Profile() {
     const navigate = useNavigate()
@@ -10,6 +12,9 @@ function Profile() {
     const [categoryName, setCategoryName] = useState("")
     const [newProductUrl, setNewProductUrl] = useState("")
     const [selectedMarketplace, setSelectedMarketplace] = useState("")
+
+    // Стейт для анимации загрузки при обновлении цен
+    const [isUpdating, setIsUpdating] = useState(false)
 
     async function fetchCategories() {
         const token = localStorage.getItem("token")
@@ -31,6 +36,37 @@ function Profile() {
     useEffect(() => {
         fetchCategories()
     }, [])
+
+    // --- НОВАЯ ФУНКЦИЯ: Принудительное обновление цен ---
+    async function handleForceUpdatePrices() {
+        if (isUpdating) return;
+        setIsUpdating(true);
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:8000/system/update-prices", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message); // Уведомляем, что процесс пошел
+
+                // Ждем 5 секунд, пока бэкенд парсит, и обновляем категории с новыми ценами
+                setTimeout(async () => {
+                    await fetchCategories();
+                    setIsUpdating(false);
+                }, 5000);
+            } else {
+                alert("Ошибка при запуске обновления цен.");
+                setIsUpdating(false);
+            }
+        } catch (error) {
+            console.error("Ошибка при обновлении цен:", error);
+            alert("Не удалось соединиться с сервером.");
+            setIsUpdating(false);
+        }
+    }
 
     function createCategory() {
         setShowCategoryInput(true)
@@ -76,10 +112,9 @@ function Profile() {
             setCategories(categories.filter(cat => cat.id !== id))
         }
     }
-//поменял тут
+
     async function addProduct(categoryId) {
         if (newProductUrl.trim() === "") return;
-
 
         if (selectedMarketplace === "") {
             alert("Пожалуйста, выберите маркетплейс");
@@ -96,20 +131,20 @@ function Profile() {
             body: JSON.stringify({
                 url: newProductUrl,
                 category_id: categoryId,
-                marketplace_id: parseInt(selectedMarketplace) // Передаем выбранную цифру
+                marketplace_id: parseInt(selectedMarketplace)
             })
         });
 
         if (response.ok) {
             setNewProductUrl("");
-            setSelectedMarketplace(""); // Сбрасываем выбор после успешного добавления
+            setSelectedMarketplace("");
             fetchCategories();
         } else {
-            // Если бэкенд вернул ошибку (например, 400), показываем её
             const errData = await response.json();
             alert(errData.detail || "Ошибка при добавлении товара");
         }
     }
+
     async function deleteProduct(productId) {
         const token = localStorage.getItem("token")
         const response = await fetch(`http://localhost:8000/products/${productId}`, {
@@ -123,6 +158,7 @@ function Profile() {
             })))
         }
     }
+
     async function clearCategory(id) {
         const token = localStorage.getItem("token")
         const response = await fetch(`http://localhost:8000/clear_category/${id}`, {
@@ -140,8 +176,26 @@ function Profile() {
         <div className="profile">
             <div className="profile_n">
                 <div className="logo">price<span>tracker</span></div>
+
+                {/* ПРАВАЯ ЧАСТЬ ШАПКИ СО ВСЕМИ КНОПКАМИ */}
                 <div className="profile-nav-right">
-                    <button className="settings-btn-nav" onClick={() => navigate("/settings")}>
+
+                    {/* Кнопка обновления цен */}
+                    <button
+                        className={`update-prices-btn ${isUpdating ? "spinning" : ""}`}
+                        onClick={handleForceUpdatePrices}
+                        disabled={isUpdating}
+                        title="Обновить цены сейчас"
+                    >
+                        <RefreshCw size={18} />
+                        {isUpdating ? "Обновление..." : "Обновить цены"}
+                    </button>
+
+                    {/* Место для компонента Уведомлений */}
+                    {/* Если у тебя есть <Notifications />, просто вставь его сюда вместо кнопки с Bell */}
+                    <Notifications />
+
+                    <button className="settings-btn-nav" onClick={() => navigate("/settings")} title="Настройки">
                         <Settings size={20} />
                     </button>
                     <button className="exit" onClick={() => navigate("/")}>Выйти</button>
@@ -204,13 +258,12 @@ function Profile() {
                                         value={newProductUrl}
                                         onChange={(e) => setNewProductUrl(e.target.value)}
                                     />
-                                    <select 
+                                    <select
                                         className="marketplace-select"
                                         value={selectedMarketplace}
                                         onChange={(e) => setSelectedMarketplace(e.target.value)}
                                     >
                                         <option value="">Выберите маркетплейс</option>
-                                        {/* Устанавливаем цифры, которые ждет бэкенд */}
                                         <option value="1">OZON</option>
                                         <option value="2">Wildberries</option>
                                         <option value="3">Яндекс Маркет</option>
@@ -219,7 +272,6 @@ function Profile() {
                                 </div>
                             )}
 
-                        
                             <button className="cat-add" onClick={() => toggleAddProduct(cat.id)}>+ Добавить товар</button>
                         </div>
                     )}
